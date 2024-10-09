@@ -17,6 +17,7 @@ for (loc in 1:nrow(locations)) {
 library(data.table)
 data = as.data.table(data)
 melted_data = melt(data, id.vars = c("time", "location"))
+melted_data$month = format(melted_data$time, "%m")
 
 library(ggplot2)
 variable_labels = c(t2m = "temperature [°C]", sd = "snow water equivalent [mm]")
@@ -26,6 +27,12 @@ for (current_variable in c("sd", "t2m")) {
     plot = plot + scale_y_continuous(name = variable_labels[current_variable])
     plot = plot + geom_line()
     plot = plot + scale_colour_brewer(palette = "Set1")
+    print(plot)
+
+    plot = ggplot(melted_data[variable == current_variable, ], aes(x = month, y = value, colour = location))
+    plot = plot + scale_y_continuous(name = variable_labels[current_variable])
+    plot = plot + geom_boxplot()
+    plot = plot + scale_colour_manual(values = c("green", "yellow", "pink"))
     print(plot)
 }
 
