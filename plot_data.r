@@ -1,6 +1,19 @@
 locations = data.frame(
     name = c("snezka", "palava", "komorni_hurka"), latitude = c(50.74, 48.84, 50.10), longitude = c(15.74, 16.64, 12.34))
 
-data = read.csv(paste0("data/", locations[1, ]$name, ".csv"))
-data$time = as.Date(data$time)
-data$location = as.factor(locations[1, ]$name)
+data = NULL
+for (loc in 1:nrow(locations)) {
+    location_data = read.csv(paste0("data/", locations[loc, ]$name, ".csv"))
+    location_data$time = as.Date(location_data$time)
+    location_data$location = as.factor(locations[loc, ]$name)
+
+    if (is.null(data)) {
+        data = location_data
+    } else {
+        data = rbind(data, location_data)
+    }
+}
+
+library(data.table)
+data = as.data.table(data)
+melted_data = melt(data, id.vars = c("time", "location"))
