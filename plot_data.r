@@ -26,7 +26,7 @@ for (current_variable in c("sd", "t2m")) {
     plot = ggplot(melted_data[variable == current_variable, ], aes(x = time, y = value, colour = location))
     plot = plot + scale_y_continuous(name = variable_labels[current_variable])
     plot = plot + geom_line()
-    plot = plot + scale_colour_manual(values = c("green", "yellow", "pink"))
+    plot = plot + scale_colour_brewer(palette = "Set1")
     print(plot)
 
     plot = ggplot(melted_data[variable == current_variable, ], aes(x = month, y = value, colour = location))
